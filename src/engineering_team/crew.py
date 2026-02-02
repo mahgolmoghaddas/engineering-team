@@ -1,6 +1,8 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 
+from .tools.write_file import WriteFileTool
+
 
 @CrewBase
 class EngineeringTeam():
@@ -32,6 +34,11 @@ class EngineeringTeam():
         return Agent(
             config=self.agents_config['frontend_engineer'],
             verbose=True,
+            allow_code_execution=True,
+            code_execution_mode="safe",
+            tools=[WriteFileTool()],
+            max_execution_time=500,
+            max_retry_limit=3
         )
 
     @agent

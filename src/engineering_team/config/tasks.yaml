@@ -1,50 +1,56 @@
 design_task:
   description: >
-    Take the high level requirements described here and prepare a detailed design for the engineer;
-    everything should be in 1 python module, but outline the classes and methods in the module.
-    Here are the requirements: {requirements}
-    IMPORTANT: Only output the design in markdown format, laying out in detail the classes and functions in the module, describing the functionality.
+    Create a complete backend design for {module_name}.py with class {class_name}.
+    Include method signatures, validation rules, transaction model, and "as-of" reporting approach.
+    Requirements: {requirements}
+    IMPORTANT: Output ONLY markdown design documentation.
   expected_output: >
-    A detailed design for the engineer, identifying the classes and functions in the module.
+    A detailed implementation-ready design in markdown.
   agent: engineering_lead
   output_file: output/{module_name}_design.md
 
+
 code_task:
   description: >
-    Write a python module that implements the design described by the engineering lead, in order to achieve the requirements.
-    Here are the requirements: {requirements}
+    Implement {module_name}.py according to the design. Requirements: {requirements}
+    IMPORTANT: Output ONLY raw Python code (no markdown). Must be directly executable.
   expected_output: >
-    A python module that implements the design and achieves the requirements.
-    IMPORTANT: Output ONLY the raw Python code without any markdown formatting, code block delimiters, or backticks.
-    The output should be valid Python code that can be directly saved to a file and executed.
+    Raw Python code for {module_name}.py
   agent: backend_engineer
   context:
     - design_task
   output_file: output/{module_name}
 
-frontend_task:
-  description: >
-    Write a gradio UI in a module app.py that demonstrates the given backend class in {module_name}.
-    Assume there is only 1 user, and keep the UI very simple indeed - just a prototype or demo.
-    Here are the requirements: {requirements}
-  expected_output: >
-    A gradio UI in module app.py that demonstrates the given backend class.
-    The file should be ready so that it can be run as-is, in the same directory as the backend module, and it should import the backend class from {module_name}.
-    IMPORTANT: Output ONLY the raw Python code without any markdown formatting, code block delimiters, or backticks.
-    The output should be valid Python code that can be directly saved to a file and executed.
-  agent: frontend_engineer
-  context:
-    - code_task
-  output_file: output/app.py
 
 test_task:
   description: >
-    Write unit tests for the given backend module {module_name} and create a test_{module_name} in the same directory as the backend module.
+    Write unit tests for output/{module_name}.py using unittest.
+    IMPORTANT: Output ONLY raw Python code (no markdown).
   expected_output: >
-    A test_{module_name} module that tests the given backend module.
-    IMPORTANT: Output ONLY the raw Python code without any markdown formatting, code block delimiters, or backticks.
-    The output should be valid Python code that can be directly saved to a file and executed.
+    Raw Python code for test_{module_name}.py
   agent: test_engineer
   context:
     - code_task
   output_file: output/test_{module_name}
+
+
+frontend_task:
+  description: >
+    Generate a complete runnable Next.js (App Router) + TypeScript + Tailwind frontend.
+    It must run with:
+      npm install
+      npm run dev
+    with ZERO manual fixes.
+
+    Use the write_file tool to create ALL required files under output/frontend/.
+    Do NOT output code blocks or markdown in your final answer.
+    After writing all files, output a short confirmation only.
+
+    Requirements: {requirements}
+  expected_output: >
+    A runnable Next.js app created under output/frontend/ with pinned dependency versions,
+    correct App Router API routes, and complete required skeleton files.
+  agent: frontend_engineer
+  context:
+    - code_task
+  output_file: output/frontend/FRONTEND_GENERATION_LOG.txt
