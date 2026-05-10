@@ -9,6 +9,16 @@ A multi-agent engineering crew built with [crewAI](https://crewai.com). This pro
 - **Pluggable tools** (e.g., a write-file tool for code output).
 - **Simple entry points** to run, train, replay, or test the crew.
 
+Input:
+Build a ticketing system with authentication and admin dashboard.
+
+Workflow:
+Lead Agent → decomposes tasks
+Backend Agent → generates FastAPI services
+Frontend Agent → generates React UI
+Testing Agent → validates outputs
+
+
 ## Project Structure
 
 ```
